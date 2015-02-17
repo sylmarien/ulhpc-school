@@ -20,7 +20,7 @@ Before starting this tutorial, please make sure you are on a compute node and no
 `oarsub -I -l nodes=1,walltime=4`  
 (for more details about this command and the node reservation process on the clusters, please referer to the [ULHPC documentation](https://hpc.uni.lu/users/docs/oar.html).)
 
-The software architecture on the platform revolves aroung the `module` tool. This command is at the core of all the workflow of using a software on the platform.
+The software architecture on the platform revolves aroung the `module` tool. This command is at the core of all the workflow to use a software on the platform.
 
 ## Adding a software to the existing stack
 
