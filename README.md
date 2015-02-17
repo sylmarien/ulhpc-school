@@ -16,7 +16,11 @@ The [third chapter](#replicating-the-architecture-of-the-platform-on-a-local-env
 
 ## Understanding and using the software available on the UL HPC platform
 
-The software architecture on the platform revolves aroung the `module` tool
+Before starting this tutorial, please make sure you are on a compute node and not on the access node. To get ressources on a compute, use the following command:  
+`oarsub -I -l nodes=1,walltime=4`  
+(for more details about this command and the node reservation process on the clusters, please referer to the [ULHPC documentation](https://hpc.uni.lu/users/docs/oar.html).)
+
+The software architecture on the platform revolves aroung the `module` tool. This command is at the core of all the workflow of using a software on the platform.
 
 ## Adding a software to the existing stack
 
