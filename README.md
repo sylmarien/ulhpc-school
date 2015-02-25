@@ -17,10 +17,19 @@ The [third chapter](#replicating-the-architecture-of-the-platform-on-a-local-env
 ## Understanding and using the software available on the UL HPC platform
 
 Before starting this tutorial, please make sure you are on a compute node and not on the access node. To get ressources on a compute, use the following command:  
-`oarsub -I -l nodes=1,walltime=4`  
+`(access)$> oarsub -I -l nodes=1,walltime=1:00:00`  
 (for more details about this command and the node reservation process on the clusters, please referer to the [ULHPC documentation](https://hpc.uni.lu/users/docs/oar.html).)
 
-The software architecture on the platform revolves aroung the `module` tool. This command is at the core of all the workflow to use a software on the platform.
+The software architecture on the platform revolves around the `module` tool. This command is at the core of the workflow to use a software on the platform, so we're going to cover its most basic command before going any further.
+
+`module` can list all the software installed in the software stack:  
+`(node)$> module avail`  
+Note that this would output a lot of text on the clusters since there are a lot of installed software, to limit the output we can limit it to what we are interested in, for example the GROMACS software :
+
+    ```
+    (node)$> module avail 2>&1 | grep -i gromacs
+    ```
+This will only output the software from the software stack that contain "gromacs" in their name.
 
 ## Adding a software to the existing stack
 
