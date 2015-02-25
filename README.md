@@ -47,9 +47,9 @@ You can now use the software and work with it. To check that it is actually load
 
     (node)$> module list
     Currently Loaded Modulefiles:
-        1) GCC/4.7.2                                                  4) gompi/1.4.10                                               7) ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
-        2) hwloc/1.6.2-GCC-4.7.2                                      5) OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2                   8) goolf/1.4.10
-        3) OpenMPI/1.6.4-GCC-4.7.2                                    6) FFTW/3.3.3-gompi-1.4.10                                    9) GROMACS/4.6.1-goolf-1.4.10-mt
+        1) GCC/4.7.2                4) gompi/1.4.10                              7) ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
+        2) hwloc/1.6.2-GCC-4.7.2    5) OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2  8) goolf/1.4.10
+        3) OpenMPI/1.6.4-GCC-4.7.2  6) FFTW/3.3.3-gompi-1.4.10                   9) GROMACS/4.6.1-goolf-1.4.10-mt
 
 When you're finished working with it, unload the software:  
 `(node)$> module unload GROMACS/4.6.1-goolf-1.4.10-mt`
@@ -58,9 +58,9 @@ However, this will only unload the `GROMACS/4.6.1-goolf-1.4.10-mt` software itse
 
     (node)$> module list
     Currently Loaded Modulefiles:
-        1) GCC/4.7.2                                                  4) gompi/1.4.10                                               7) ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
-        2) hwloc/1.6.2-GCC-4.7.2                                      5) OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2                   8) goolf/1.4.10
-        3) OpenMPI/1.6.4-GCC-4.7.2                                    6) FFTW/3.3.3-gompi-1.4.10
+        1) GCC/4.7.2                4) gompi/1.4.10                              7) ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
+        2) hwloc/1.6.2-GCC-4.7.2    5) OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2  8) goolf/1.4.10
+        3) OpenMPI/1.6.4-GCC-4.7.2  6) FFTW/3.3.3-gompi-1.4.10
 You could unload all these dependencies by hand, but it would be too long and painful, the efficient way is to `purge` the loaded software to restore the initial state of the session:  
 `(node)$> module purge`  
 This unloads *all* the software that you see with `module list`.
