@@ -23,14 +23,48 @@ Before starting this tutorial, please make sure you are on a compute node and no
 The software architecture on the platform revolves around the `module` tool. This command is at the core of the workflow to use a software on the platform, so we're going to cover its most basic command before going any further.
 
 `module` can list all the software installed in the software stack:  
-`(node)$> module avail`  
+
+    (node)$> module avail
+    --------------------------- /opt/apps/HPCBIOS/modules/bio -------------------------
+    ABySS/1.3.4-goolf-1.4.10-Python-2.7.3          FASTX-Toolkit/0.0.13.2-goolf-1.4.10
+    ABySS/1.3.4-ictce-5.3.0-Python-2.7.3           FASTX-Toolkit/0.0.13.2-ictce-5.3.0
+    [...]
 Note that this would output a lot of text on the clusters since there are a lot of installed software, to limit the output we can limit it to what we are interested in, for example the GROMACS software :
 
-    ```
+    
     (node)$> module avail 2>&1 | grep -i gromacs
-    ```
+    GROMACS/4.6.1-goolf-1.4.10-hybrid
+    GROMACS/4.6.1-goolf-1.4.10-mt
+    GROMACS/4.6.1-goolfc-1.3.12-hybrid
+    GROMACS/4.6.1-goolfc-1.3.12-mt
+    [...]
 This will only output the software from the software stack that contain "gromacs" in their name.
 
-## Adding a software to the existing stack
+To start using the version you want, for example `GROMACS/4.6.1-goolf-1.4.10-mt`, we are going to `load` the software:  
+`(node)$> module load GROMACS/4.6.1-goolf-1.4.10-mt`
+
+You can now use the software and work with it. To check that it is actually loaded, list the loaded software:
+
+    (node)$> module list
+    Currently Loaded Modulefiles:
+        1) GCC/4.7.2                                                  4) gompi/1.4.10                                               7) ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
+        2) hwloc/1.6.2-GCC-4.7.2                                      5) OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2                   8) goolf/1.4.10
+        3) OpenMPI/1.6.4-GCC-4.7.2                                    6) FFTW/3.3.3-gompi-1.4.10                                    9) GROMACS/4.6.1-goolf-1.4.10-mt
+
+When you're finished working with it, unload the software:  
+`(node)$> module unload GROMACS/4.6.1-goolf-1.4.10-mt`
+
+However, this will only unload the `GROMACS/4.6.1-goolf-1.4.10-mt` software itself, not its dependencies, as you can see it:
+
+    (node)$> module list
+    Currently Loaded Modulefiles:
+        1) GCC/4.7.2                                                  4) gompi/1.4.10                                               7) ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
+        2) hwloc/1.6.2-GCC-4.7.2                                      5) OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2                   8) goolf/1.4.10
+        3) OpenMPI/1.6.4-GCC-4.7.2                                    6) FFTW/3.3.3-gompi-1.4.10
+You could unload all these dependencies by hand, but it would be too long and painful, the efficient way is to `purge` the loaded software to restore the initial state of the session:  
+`(node)$> module purge`  
+This unloads *all* the software that you see with `module list`.
+
+## just a software to the existing stack
 
 ## Replicating the architecture of the platform on a local environment
