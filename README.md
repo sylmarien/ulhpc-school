@@ -32,7 +32,7 @@ The software architecture on the platform revolves around the `module` tool. Thi
 Note that this would output a lot of text on the clusters since there are a lot of installed software, to limit the output we can limit it to what we are interested in, for example the GROMACS software :
 
     
-    (node)$> module avail 2>&1 | grep -i gromacs
+    (node)$> module avail gromacs
     GROMACS/4.6.1-goolf-1.4.10-hybrid
     GROMACS/4.6.1-goolf-1.4.10-mt
     GROMACS/4.6.1-goolfc-1.3.12-hybrid
