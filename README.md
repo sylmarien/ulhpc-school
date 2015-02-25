@@ -65,6 +65,6 @@ You could unload all these dependencies by hand, but it would be too long and pa
 `(node)$> module purge`  
 This unloads *all* the software that you see with `module list`.
 
-## just a software to the existing stack
+## Add a software to the existing stack
 
 ## Replicating the architecture of the platform on a local environment
