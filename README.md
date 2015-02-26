@@ -24,7 +24,7 @@ The software architecture on the platform revolves around the `module` tool. Thi
 
 ### `module` command basics
 
-`module` can list all the software installed in the software stack:  
+`module` can list all the software modules installed in the software stack:  
 
     (node)$> module avail
     ------------------- /opt/apps/devel/v0.0-20150212/core/modules/bio ----------------
@@ -38,12 +38,12 @@ Note that this would output a lot of text on the clusters since there are a lot 
     bio/GROMACS/4.6.1-ictce-5.3.0-hybrid    bio/GROMACS/4.6.1-ictce-5.3.0-mt
     bio/GROMACS/4.6.5-goolf-1.4.10-mt (D)
     [...]
-This will only output the software from the software stack that contain "gromacs" in their name.
+This will only output the software modules from the software stack that contain "gromacs" in their name.
 
-To start using the version you want, for example `bio/GROMACS/4.6.5-goolf-1.4.10-mt`, we are going to `load` the software:  
+To start using the version you want, for example `bio/GROMACS/4.6.5-goolf-1.4.10-mt`, we are going to `load` the software module:  
 `(node)$> module load bio/GROMACS/4.6.5-goolf-1.4.10-mt`
 
-You can now use the software and work with it. To check that it is actually loaded, list the loaded software:
+You can now use the software and work with it. To check that it is actually loaded, list the loaded software modules:
 
     (node)$> module list
     Currently Loaded Modules:
@@ -51,25 +51,25 @@ You can now use the software and work with it. To check that it is actually load
         2) system/hwloc/1.6.2-GCC-4.7.2   5) numlib/OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2   8) toolchain/goolf/1.4.10
         3) mpi/OpenMPI/1.6.4-GCC-4.7.2    6) numlib/FFTW/3.3.3-gompi-1.4.10                    9) bio/GROMACS/4.6.5-goolf-1.4.10-mt
 
-When you're finished working with it, unload the software:  
+When you're finished working with it, unload the software module:  
 `(node)$> module unload bio/GROMACS/4.6.5-goolf-1.4.10-mt`
 
-However, this will only unload the `bio/GROMACS/4.6.5-goolf-1.4.10-mt` software itself, not its dependencies, as you can see it:
+However, this will only unload the `bio/GROMACS/4.6.5-goolf-1.4.10-mt` software module itself, not its dependencies, as you can see it:
 
     (node)$> module list
     Currently Loaded Modules:
         1) compiler/GCC/4.7.2             4) toolchain/gompi/1.4.10                            7) numlib/ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
         2) system/hwloc/1.6.2-GCC-4.7.2   5) numlib/OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2   8) toolchain/goolf/1.4.10
         3) mpi/OpenMPI/1.6.4-GCC-4.7.2    6) numlib/FFTW/3.3.3-gompi-1.4.10
-You could unload all these dependencies by hand, but it would be too long and painful, the efficient way is to `purge` the loaded software to restore the initial state of the session:  
+You could unload all these dependencies by hand, but it would be too long and painful, the efficient way is to `purge` the loaded software modules to restore the initial state of the session:  
 `(node)$> module purge`  
-This unloads *all* the software that you see with `module list`.
+This unloads *all* the software modules that you see with `module list`.
 
-Now that we have th e basics to manipulate the software, we're going to look at the said software and the different concepts surrounding them.
+Now that we have the basics to manipulate the software modules, we're going to deeper look at them and the different concepts surrounding them.
 
 ### Software stack architecture
 
-The upper layer of the architecture is what we call a *sofwtare set*. It is a collection of software, common example are a _core_ software set that would contain only tested software and _experimental_ that would contain untested software.  
+The upper layer of the architecture is what we call the *sofwtare set*. It is a collection of software, common example are a _core_ software set that would contain only tested software and an _experimental_ one that would contain untested software.  
 The goal of these groupings is to provide information on the degree of support for the various software.
 
 Inside of these software sets, software are named with regard to a *naming scheme* which provides information on the software and allows for a better presentation of results of the `module avail` command.  
