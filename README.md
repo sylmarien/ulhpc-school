@@ -22,48 +22,64 @@ Before starting this tutorial, please make sure you are on a compute node and no
 
 The software architecture on the platform revolves around the `module` tool. This command is at the core of the workflow to use a software on the platform, so we're going to cover its most basic command before going any further.
 
+### `module` command basics
+
 `module` can list all the software installed in the software stack:  
 
     (node)$> module avail
-    --------------------------- /opt/apps/HPCBIOS/modules/bio -------------------------
-    ABySS/1.3.4-goolf-1.4.10-Python-2.7.3          FASTX-Toolkit/0.0.13.2-goolf-1.4.10
-    ABySS/1.3.4-ictce-5.3.0-Python-2.7.3           FASTX-Toolkit/0.0.13.2-ictce-5.3.0
+    ------------------- /opt/apps/devel/v0.0-20150212/core/modules/bio ----------------
+    bio/ABySS/1.3.4-goolf-1.4.10-Python-2.7.3        bio/Bowtie2/2.2.2-goolf-1.4.10   (D)
+    bio/ABySS/1.3.4-ictce-5.3.0-Python-2.7.3  (D)    bio/Cufflinks/2.0.2-goolf-1.4.10
     [...]
 Note that this would output a lot of text on the clusters since there are a lot of installed software, to limit the output we can limit it to what we are interested in, for example the GROMACS software :
-
     
     (node)$> module avail gromacs
-    GROMACS/4.6.1-goolf-1.4.10-hybrid
-    GROMACS/4.6.1-goolf-1.4.10-mt
-    GROMACS/4.6.1-goolfc-1.3.12-hybrid
-    GROMACS/4.6.1-goolfc-1.3.12-mt
+    ----------- /opt/apps/devel/v0.0-20150212/core/modules/bio --------------
+    bio/GROMACS/4.6.1-ictce-5.3.0-hybrid    bio/GROMACS/4.6.1-ictce-5.3.0-mt
+    bio/GROMACS/4.6.5-goolf-1.4.10-mt (D)
     [...]
 This will only output the software from the software stack that contain "gromacs" in their name.
 
-To start using the version you want, for example `GROMACS/4.6.1-goolf-1.4.10-mt`, we are going to `load` the software:  
-`(node)$> module load GROMACS/4.6.1-goolf-1.4.10-mt`
+To start using the version you want, for example `bio/GROMACS/4.6.5-goolf-1.4.10-mt`, we are going to `load` the software:  
+`(node)$> module load bio/GROMACS/4.6.5-goolf-1.4.10-mt`
 
 You can now use the software and work with it. To check that it is actually loaded, list the loaded software:
 
     (node)$> module list
-    Currently Loaded Modulefiles:
-        1) GCC/4.7.2                4) gompi/1.4.10                              7) ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
-        2) hwloc/1.6.2-GCC-4.7.2    5) OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2  8) goolf/1.4.10
-        3) OpenMPI/1.6.4-GCC-4.7.2  6) FFTW/3.3.3-gompi-1.4.10                   9) GROMACS/4.6.1-goolf-1.4.10-mt
+    Currently Loaded Modules:
+        1) compiler/GCC/4.7.2             4) toolchain/gompi/1.4.10                            7) numlib/ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
+        2) system/hwloc/1.6.2-GCC-4.7.2   5) numlib/OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2   8) toolchain/goolf/1.4.10
+        3) mpi/OpenMPI/1.6.4-GCC-4.7.2    6) numlib/FFTW/3.3.3-gompi-1.4.10                    9) bio/GROMACS/4.6.5-goolf-1.4.10-mt
 
 When you're finished working with it, unload the software:  
-`(node)$> module unload GROMACS/4.6.1-goolf-1.4.10-mt`
+`(node)$> module unload bio/GROMACS/4.6.5-goolf-1.4.10-mt`
 
-However, this will only unload the `GROMACS/4.6.1-goolf-1.4.10-mt` software itself, not its dependencies, as you can see it:
+However, this will only unload the `bio/GROMACS/4.6.5-goolf-1.4.10-mt` software itself, not its dependencies, as you can see it:
 
     (node)$> module list
-    Currently Loaded Modulefiles:
-        1) GCC/4.7.2                4) gompi/1.4.10                              7) ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
-        2) hwloc/1.6.2-GCC-4.7.2    5) OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2  8) goolf/1.4.10
-        3) OpenMPI/1.6.4-GCC-4.7.2  6) FFTW/3.3.3-gompi-1.4.10
+    Currently Loaded Modules:
+        1) compiler/GCC/4.7.2             4) toolchain/gompi/1.4.10                            7) numlib/ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
+        2) system/hwloc/1.6.2-GCC-4.7.2   5) numlib/OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2   8) toolchain/goolf/1.4.10
+        3) mpi/OpenMPI/1.6.4-GCC-4.7.2    6) numlib/FFTW/3.3.3-gompi-1.4.10
 You could unload all these dependencies by hand, but it would be too long and painful, the efficient way is to `purge` the loaded software to restore the initial state of the session:  
 `(node)$> module purge`  
 This unloads *all* the software that you see with `module list`.
+
+Now that we have th e basics to manipulate the software, we're going to look at the said software and the different concepts surrounding them.
+
+### Software stack architecture
+
+The upper layer of the architecture is what we call a *sofwtare set*. It is a collection of software, common example are a _core_ software set that would contain only tested software and _experimental_ that would contain untested software.  
+The goal of these groupings is to provide information on the degree of support for the various software.
+
+Inside of these software sets, software are named with regard to a *naming scheme* which provides information on the software and allows for a better presentation of results of the `module avail` command.  
+Software named following following this naming scheme have the following skeleton: **software_class/software_name/software_complete_version** where  
+- software_class describes the category in which the software is classified and can be found among the following classe: [base, bio, cae, chem, compiler, data, debugger, devel, lang, lib, math, mpi, numlib, phys, system, toolchain, tools, vis]
+- software_name is the name of the software, e.g. GROMACS or ABySS
+- software_complete_version is the complete version of the software: it contains the version of the software itself followed by the type and version of the main dependencies it relies on (e.g. compiler) with the following format: software_version-dependencies_versions
+
+What all this architecture allows when considering the usage of the software stack is that it provides more information in a more structured way.  
+Firstly, all the software of a given software set will be grouped together when listing the software with the `module avail` command.
 
 ## Add a software to the existing stack
 
