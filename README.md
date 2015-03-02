@@ -156,6 +156,8 @@ In this part, we are going to create a software stack from scratch. This is espe
 
 We suppose that RESIF is already installed, if not, follow the instructions described [above](#installation-of-resif).
 
+### Direct method
+
 The first thing to do is to create the swsets.yaml file that describes which software we want to install. Create in your home directory a file named `swsets.yaml` and make it match the following content:
 
         core:
@@ -166,10 +168,38 @@ We could make the list go longer, but this would take much longer and is not nec
 
 We can now install all the software stack in a single command:
 
-        resif cleaninstall --swsets-config ~/swsets.yaml core
+        $> resif cleaninstall --swsets-config ~/swsets.yaml core
 This will install everything using `~/.local/resif` as the root of the installation.
 
 To use this newly installed software stack, source the LOADME file inside of the rootinstall directory (This path should look like this: `~/.local/resif/devel/vx.y-YYYYMMDD/LOADME-vx.y-YYYYMMDD.sh`)
+
+The software stack is now ready to be used.
+
+### Indirect method
+
+In this method we are going to create the architecture and then add software to it.
+
+We create the architecture using the `bootstrap` subcommand:
+
+        $> resif bootstrap
+This will create the architecture using `~/.local/resif` as the root of the installation.
+
+We now need to make this architecture active: source the LOADME file inside of the rootinstall directory (This path should look like this: `~/.local/resif/devel/vx.y-YYYYMMDD/LOADME-vx.y-YYYYMMDD.sh`)
+
+Then we need to create the file that describe the software we want to install. In your home directory, create a file named `swsets.yaml` and make it match the following content:
+
+        core:
+          - bzip2-1.0.6.eb
+          - ABINIT-7.2.1-x86_64_linux_gnu4.5.eb
+
+We could make the list go longer, but this would take much longer and is not necessary for our example.
+
+We now only need to build the given software:
+
+        $> resif build --swsets-config ~/swsets.yaml core
+
+This will install the software listed in the swsets.yaml file. The software stack is now ready to be used.
+
 
 To learn more about RESIF and how to control more parameters of its usage, please refer to the [documentation](LINK_TO_ADD_HERE) of the tool.
 
