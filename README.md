@@ -167,7 +167,9 @@ We could make the list go longer, but this would take much longer and is not nec
 We can now install all the software stack in a single command:
 
         resif cleaninstall --swsets-config ~/swsets.yaml core
-This will install everything using ~/.local/resif as the root of the installation.
+This will install everything using `~/.local/resif` as the root of the installation.
+
+To use this newly installed software stack, source the LOADME file inside of the rootinstall directory (This path should look like this: `~/.local/resif/devel/vx.y-YYYYMMDD/LOADME-vx.y-YYYYMMDD.sh`)
 
 To learn more about RESIF and how to control more parameters of its usage, please refer to the [documentation](LINK_TO_ADD_HERE) of the tool.
 
