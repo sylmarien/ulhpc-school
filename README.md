@@ -98,15 +98,20 @@ Once all of that is installed, we can start installing RESIF.
 
 First, we install a Python dependency:
 
-        pip install --install-option="--prefix=$HOME/.local" vsc-base
+        (node)$> pip install --install-option="--prefix=$HOME/.local" vsc-base
 
 We can now install RESIF itself:
 
-        pip install --install-option="--prefix=$HOME/.local" resif
+        (node)$> pip install --install-option="--prefix=$HOME/.local" resif
+
+To make it available and working, we need to modify some environement variables:
+
+        (node)$> export PATH=$PATH:~/local/bin
+        (node)$> export PYTHONPATH=$PYTHONPATH:~/local/lib/python2.7/site-packages
 
 And then initialize it (this will download the required sources to build new software):
 
-        resif init
+        (node)$> resif init
 
 Once this is finished we can start the steps to actually install the new software.
 
@@ -128,12 +133,12 @@ You can put as much software and/or software sets as you want.
 
 Now install the software using the build subcommand:
 
-        resif build --installdir $HOME/.local/resif mysoftware
-This will install the software using $HOME/.local/resif as the root of the installation.
+        (node)$> resif build --installdir ~/.local/resif --swsets-config ~/swsets.yaml mysoftware
+This will install the software using ~/.local/resif as the root of the installation.
 
 Tom ake the software available yo uthen need to add its path to the list of the available pathes:
 
-        export MODULEPATH=$HOME/.local/resif/mysoftware/modules/all:$MODULEPATH
+        (node)$> export MODULEPATH=~/.local/resif/mysoftware/modules/all:$MODULEPATH
 
 Now, we should see `bzip2` at the very beginning of the output of the list of the software modules:
 
@@ -147,7 +152,25 @@ RESIF offers a lot more possibilities than what we just saw, for more details, g
 
 ## Replicating the architecture of the platform on a local environment
 
+In this part, we are going to create a software stack from scratch. This is especially useful if you want to work on a local machine (e.g. your laptop) with the same tools than those provided on the platform (for example when you're travelling).
+
+We suppose that RESIF is already installed, if not, follow the instructions described [above](#installation-of-resif).
+
+The first thing to do is to create the swsets.yaml file that describes which software we want to install. Create in your home directory a file named `swsets.yaml` and make it match the following content:
+
+        core:
+          - bzip2-1.0.6.eb
+          - ABINIT-7.2.1-x86_64_linux_gnu4.5.eb
+
+We could make the list go longer, but this would take much longer and is not necessary for our example.
+
+We can now install all the software stack in a single command:
+
+        resif cleaninstall --swsets-config ~/swsets.yaml core
+This will install everything using ~/.local/resif as the root of the installation.
+
+To learn more about RESIF and how to control more parameters of its usage, please refer to the [documentation](LINK_TO_ADD_HERE) of the tool.
+
 To conclude this tutorial, here is a schema that summarizes the previous parts:
 
-Image Workflow:
 ![General Workflow](https://cloud.githubusercontent.com/assets/8776275/6438824/177e4042-c0cd-11e4-8693-85a27c11eff5.png)
