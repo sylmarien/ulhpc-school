@@ -81,9 +81,71 @@ The general output of the `module avail` command will then have the following ge
 
 ## Add a software to the existing stack
 
+In this part, we are going to go through the steps to add a software that is not already provided on the platform. This is done using the RESIF tool.
+So first of all we are going to install this software and then use it to add a software (bzip2).
 
+We are still going to work from a job (node) here.
+
+### Installation of RESIF
+
+First, there are a few prerequisites that we need to have:
+
+- Python 2.6 or above
+- pip (a python command line installer)
+- git
+
+Once all of that is installed, we can start installing RESIF.
+
+First, we install a Python dependency:
+
+        pip install --install-option="--prefix=$HOME/.local" vsc-base
+
+We can now install RESIF itself:
+
+        pip install --install-option="--prefix=$HOME/.local" resif
+
+And then initialize it (this will download the required sources to build new software):
+
+        resif init
+
+Once this is finished we can start the steps to actually install the new software.
+
+First we need to create a file that describes what we want to install. Create a file (we are assuming it is in your home directory), name it `swsets.yaml` and make its content to match the following lines:
+
+        mysoftware:
+          - bzip2-1.0.6.eb
+
+This is the format that RESIF reads, the layout is the following:
+
+        software_set1:
+          - software1
+          - software2
+        software_set2:
+          - software3
+You can put as much software and/or software sets as you want.
+
+Now install the software using the build subcommand:
+
+        resif build --installdir $HOME/.local/resif mysoftware
+This will install the software using $HOME/.local/resif as the root of the installation.
+
+Tom ake the software available yo uthen need to add its path to the list of the available pathes:
+
+        export MODULEPATH=$HOME/.local/resif/mysoftware/modules/all:$MODULEPATH
+
+Now, we should see `bzip2` at the very beginning of the output of the list of the software modules:
+
+        (node)$> module avail
+        ----- /home/users/username/.local/resif/mysoftware/core/modules/all -----
+        tools/bzip2/1.0.6
+
+Your software is installed and ready to use.
+
+RESIF offers a lot more possibilities than what we just saw, for more details, go check the [documentation](LINK_TO_ADD_HERE) of the tool.
 
 ## Replicating the architecture of the platform on a local environment
+
+To conclude this tutorial, here is a schema that summarizes the previous parts:
 
 Image Workflow:
 ![General Workflow](https://cloud.githubusercontent.com/assets/8776275/6438824/177e4042-c0cd-11e4-8693-85a27c11eff5.png)
