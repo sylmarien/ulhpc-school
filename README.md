@@ -76,7 +76,7 @@ What all this architecture allows when considering the usage of the software sta
 Firstly, all the software of a given software set will be grouped together when listing the software with the `module avail` command.  
 And inside of a given software set, the various software will be groupe by software class.
 
-The general output of the `module avail` command will then have the following general output:  
+The `module avail` command will then have the following general output:  
 ![module avail output](https://cloud.githubusercontent.com/assets/8776275/6438964/53d480e6-c0ce-11e4-815c-6c5bc075bb1d.png)
 
 ## Add a software to the existing stack
