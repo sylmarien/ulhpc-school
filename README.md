@@ -1,9 +1,3 @@
-`README.md`
-
-Copyright (c) 2015 Maxime Schmitt <maxime.schmitt@telecom-bretagne.eu>
-
--------------------
-
 # UL HPC Tutorial: Use and manage software with module and RESIF on the UL HPC platform
 
 The objective of this tutorial is to present how to interact with the software installed on the UL HPC platform, from using provided software to extending the stack by adding new software on the platform, and also replicating the architecture on a local machine.
@@ -22,7 +16,7 @@ Before starting this tutorial, please make sure you are on a compute node and no
 
 The software architecture on the platform revolves around the `module` tool. This command is at the core of the workflow to use a software on the platform, so we're going to cover its most basic command before going any further.
 
-### `module` command basics
+### `module` command basics and basic workflow
 
 `module` can list all the software modules installed in the software stack:  
 
@@ -79,8 +73,17 @@ Software named following following this naming scheme have the following skeleto
 - software_complete_version is the complete version of the software: it contains the version of the software itself followed by the type and version of the main dependencies it relies on (e.g. compiler) with the following format: software_version-dependencies_versions
 
 What all this architecture allows when considering the usage of the software stack is that it provides more information in a more structured way.  
-Firstly, all the software of a given software set will be grouped together when listing the software with the `module avail` command.
+Firstly, all the software of a given software set will be grouped together when listing the software with the `module avail` command.  
+And inside of a given software set, the various software will be groupe by software class.
+
+The general output of the `module avail` command will then have the following general output:  
+![module avail output](https://cloud.githubusercontent.com/assets/8776275/6438964/53d480e6-c0ce-11e4-815c-6c5bc075bb1d.png)
 
 ## Add a software to the existing stack
 
+
+
 ## Replicating the architecture of the platform on a local environment
+
+Image Workflow:
+![General Workflow](https://cloud.githubusercontent.com/assets/8776275/6438824/177e4042-c0cd-11e4-8693-85a27c11eff5.png)
