@@ -110,6 +110,8 @@ And then initialize it (this will download the required sources to build new sof
 
 Once this is finished we can start the steps to actually install the new software.
 
+### Installation of additional software
+
 First we need to create a file that describes what we want to install. Create a file (we are assuming it is in your home directory), name it `swsets.yaml` and make its content to match the following lines:
 
         mysoftware:
