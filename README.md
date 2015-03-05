@@ -77,7 +77,7 @@ Firstly, all the software of a given software set will be grouped together when 
 And inside of a given software set, the various software will be groupe by software class.
 
 The `module avail` command will then have the following general output:  
-![module avail output](https://cloud.githubusercontent.com/assets/8776275/6438964/53d480e6-c0ce-11e4-815c-6c5bc075bb1d.png)
+![module avail output](images/av_output.png)
 
 ## Add a software to the existing stack
 
@@ -205,4 +205,4 @@ To learn more about RESIF and how to control more parameters of its usage, pleas
 
 To conclude this tutorial, here is a schema that summarizes the previous parts:
 
-![General Workflow](https://cloud.githubusercontent.com/assets/8776275/6438824/177e4042-c0cd-11e4-8693-85a27c11eff5.png)
+![General Workflow](images/RESIFv6.png)
