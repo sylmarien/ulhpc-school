@@ -1,4 +1,4 @@
-# UL HPC Tutorial: Use and manage software with module and RESIF on the UL HPC platform
+# UL HPC Tutorial: Using RESIF to manage software modules
 
 The objective of this tutorial is to present how to interact with the software installed on the UL HPC platform, from using provided software to extending the stack by adding new software on the platform, and also replicating the architecture on a local machine.
 
@@ -14,7 +14,7 @@ Before starting this tutorial, please make sure you are on a compute node and no
 `(access)$> oarsub -I -l nodes=1,walltime=1:00:00`  
 (for more details about this command and the node reservation process on the clusters, please referer to the [ULHPC documentation](https://hpc.uni.lu/users/docs/oar.html).)
 
-The software architecture on the platform revolves around the `module` tool. This command is at the core of the workflow to use a software on the platform, so we're going to cover its most basic command before going any further.
+The software architecture on the platform revolves around the `module` tool. This command is at the core of the workflow to use a software on the platform, so we're going to cover its most basic commands before going any further.
 
 ### `module` command basics and basic workflow
 
@@ -79,7 +79,7 @@ And inside of a given software set, the various software will be groupe by softw
 The `module avail` command will then have the following general output:  
 ![module avail output](images/av_output.png)
 
-## Add a software to the existing stack
+## Adding a software to the existing stack
 
 In this part, we are going to go through the steps to add a software that is not already provided on the platform. This is done using the RESIF tool.
 So first of all we are going to install this software and then use it to add a software (bzip2).
@@ -96,11 +96,7 @@ First, there are a few prerequisites that we need to have:
 
 Once all of that is installed, we can start installing RESIF.
 
-First, we install a Python dependency:
-
-        (node)$> pip install --install-option="--prefix=$HOME/.local" vsc-base
-
-We can now install RESIF itself:
+We install RESIF:
 
         (node)$> pip install --install-option="--prefix=$HOME/.local" resif
 
@@ -136,7 +132,7 @@ Now install the software using the build subcommand:
         (node)$> resif build --installdir ~/.local/resif --swsets-config ~/swsets.yaml mysoftware
 This will install the software using ~/.local/resif as the root of the installation.
 
-Tom ake the software available yo uthen need to add its path to the list of the available pathes:
+To make the software available you then need to add its path to the list of the available pathes:
 
         (node)$> export MODULEPATH=~/.local/resif/mysoftware/modules/all:$MODULEPATH
 
