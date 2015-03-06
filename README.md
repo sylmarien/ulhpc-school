@@ -96,7 +96,7 @@ First, there are a few prerequisites that we need to have:
 
 Once all of that is installed, we can start installing RESIF.
 
-We install RESIF itself:
+We install RESIF:
 
         (node)$> pip install --install-option="--prefix=$HOME/.local" resif
 
