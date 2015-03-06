@@ -14,7 +14,7 @@ Before starting this tutorial, please make sure you are on a compute node and no
 `(access)$> oarsub -I -l nodes=1,walltime=1:00:00`  
 (for more details about this command and the node reservation process on the clusters, please referer to the [ULHPC documentation](https://hpc.uni.lu/users/docs/oar.html).)
 
-The software architecture on the platform revolves around the `module` tool. This command is at the core of the workflow to use a software on the platform, so we're going to cover its most basic command before going any further.
+The software architecture on the platform revolves around the `module` tool. This command is at the core of the workflow to use a software on the platform, so we're going to cover its most basic commands before going any further.
 
 ### `module` command basics and basic workflow
 
@@ -27,9 +27,9 @@ The software architecture on the platform revolves around the `module` tool. Thi
     [...]
 Note that this would output a lot of text on the clusters since there are a lot of installed software, to limit the output we can limit it to what we are interested in, for example the GROMACS software :
     
-    (node)$> module avail 2&>1 grep -i gromacs
-    ----------- /opt/apps/devel/v0.0-20150212/core/modules/bio --------------
-    bio/GROMACS/4.6.1-ictce-5.3.0-hybrid    bio/GROMACS/4.6.1-ictce-5.3.0-mt
+    (node)$> module avail 2>&1 | grep -i gromacs
+    bio/GROMACS/4.6.1-ictce-5.3.0-hybrid
+    bio/GROMACS/4.6.1-ictce-5.3.0-mt
     bio/GROMACS/4.6.5-goolf-1.4.10-mt (D)
     [...]
 This will only output the software modules from the software stack that contain "gromacs" in their name.
@@ -96,11 +96,7 @@ First, there are a few prerequisites that we need to have:
 
 Once all of that is installed, we can start installing RESIF.
 
-First, we install a Python dependency:
-
-        (node)$> pip install --install-option="--prefix=$HOME/.local" vsc-base
-
-We can now install RESIF itself:
+We install RESIF itself:
 
         (node)$> pip install --install-option="--prefix=$HOME/.local" resif
 
@@ -136,7 +132,7 @@ Now install the software using the build subcommand:
         (node)$> resif build --installdir ~/.local/resif --swsets-config ~/swsets.yaml mysoftware
 This will install the software using ~/.local/resif as the root of the installation.
 
-Tom ake the software available yo uthen need to add its path to the list of the available pathes:
+To make the software available you then need to add its path to the list of the available pathes:
 
         (node)$> export MODULEPATH=~/.local/resif/mysoftware/modules/all:$MODULEPATH
 
