@@ -79,7 +79,7 @@ And inside of a given software set, the various software will be groupe by softw
 The `module avail` command will then have the following general output:  
 ![module avail output](images/av_output.png)
 
-## Add a software to the existing stack
+## Adding a software to the existing stack
 
 In this part, we are going to go through the steps to add a software that is not already provided on the platform. This is done using the RESIF tool.
 So first of all we are going to install this software and then use it to add a software (bzip2).
