@@ -27,7 +27,7 @@ The software architecture on the platform revolves around the `module` tool. Thi
     [...]
 Note that this would output a lot of text on the clusters since there are a lot of installed software, to limit the output we can limit it to what we are interested in, for example the GROMACS software :
     
-    (node)$> module avail gromacs
+    (node)$> module avail 2&>1 grep -i gromacs
     ----------- /opt/apps/devel/v0.0-20150212/core/modules/bio --------------
     bio/GROMACS/4.6.1-ictce-5.3.0-hybrid    bio/GROMACS/4.6.1-ictce-5.3.0-mt
     bio/GROMACS/4.6.5-goolf-1.4.10-mt (D)
@@ -107,7 +107,7 @@ We can now install RESIF itself:
 To make it available and working, we need to modify some environement variables:
 
         (node)$> export PATH=$PATH:~/local/bin
-        (node)$> export PYTHONPATH=$PYTHONPATH:~/local/lib/python2.7/site-packages
+        (node)$> export PYTHONPATH=$PYTHONPATH:~/local/lib/python2.6/site-packages
 
 And then initialize it (this will download the required sources to build new software):
 
