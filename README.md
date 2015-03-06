@@ -1,4 +1,4 @@
-# UL HPC Tutorial: Use and manage software with module and RESIF on the UL HPC platform
+# UL HPC Tutorial: Using RESIF to manage software modules
 
 The objective of this tutorial is to present how to interact with the software installed on the UL HPC platform, from using provided software to extending the stack by adding new software on the platform, and also replicating the architecture on a local machine.
 
