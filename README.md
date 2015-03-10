@@ -1,43 +1,46 @@
 # UL HPC Tutorial: Using RESIF to manage software modules
 
-The objective of this tutorial is to present how to interact with the software installed on the UL HPC platform, from using provided software to extending the stack by adding new software on the platform, and also replicating the architecture on a local machine.
+The objective of this tutorial is to present how to interact with the software installed on the UL HPC platform, from using provided software to extending the software collection by adding new software on the platform, and also reproducing the software environment on a local workstation.
 
-This course is divided in three chapters that are going through each of the previously stated use cases.
+This course is divided in three chapters that are going through each of these use cases.
 
-The [first chapter](#understanding-and-using-the-software-available-on-the-ul-hpc-platform) goes through the architecture of the software stack and the basic tools to start using them.  
-The [second chapter](#adding-a-software-to-the-existing-stack) goes through the process of adding new software to the existing stack as a user using RESIF, an internally developped tool to manage the software stack on the platform.  
-The [third chapter](#replicating-the-architecture-of-the-platform-on-a-local-environment) goes through the process of replicating the software stack present on the platform, or part of it, on a local environment.
+The [first chapter](#understanding-and-using-the-software-available-on-the-ul-hpc-platform) details the architecture of the software collection and the basic tools to start using the software.  
+The [second chapter](#adding-a-software-to-the-existing-stack) defines the process of adding new software to the existing stack as a user using RESIF, the tool developed internally to manage the software stack on the UL HPC platform.  
+The [third chapter](#replicating-the-architecture-of-the-platform-on-a-local-environment) explains the process of reproducing the software stack present on the platform, or part of it, in a local environment.
 
-## Understanding and using the software available on the UL HPC platform
+## Using the software environment available on the UL HPC platform
 
-Before starting this tutorial, please make sure you are on a compute node and not on the access node. To get ressources on a compute, use the following command:  
+Before starting this tutorial, please make sure you are on a compute node of Gaia/Chaos and not on the access node. To get resources on a compute node, use the following command:  
 `(access)$> oarsub -I -l nodes=1,walltime=1:00:00`  
 (for more details about this command and the node reservation process on the clusters, please referer to the [ULHPC documentation](https://hpc.uni.lu/users/docs/oar.html).)
 
-The software architecture on the platform revolves around the `module` tool. This command is at the core of the workflow to use a software on the platform, so we're going to cover its most basic commands before going any further.
+Using the software available on the UL HPC platform is done through [environment modules](http://modules.sourceforge.net/)/[Lmod](https://www.tacc.utexas.edu/research-development/tacc-projects/lmod) which provide a `module` command that we review in the following section.
+Environment Modules allow us to provide a multitude of applications and libraries in multiple versions. These tools use special files named "modules" that define ways to manage environment variables such as PATH, LD_LIBRARY_PATH and MANPATH, enabling the easy loading and unloading of application/library profiles and their dependencies.
 
-### `module` command basics and basic workflow
+### `module` command basics and workflow
 
-`module` can list all the software modules installed in the software stack:  
+By using `module available` (or the shorter forms `module avail` or `module av`) we can list all the software modules of the software stack:  
 
     (node)$> module avail
     ------------------- /opt/apps/devel/v0.0-20150212/core/modules/bio ----------------
     bio/ABySS/1.3.4-goolf-1.4.10-Python-2.7.3        bio/Bowtie2/2.2.2-goolf-1.4.10   (D)
     bio/ABySS/1.3.4-ictce-5.3.0-Python-2.7.3  (D)    bio/Cufflinks/2.0.2-goolf-1.4.10
     [...]
-Note that this would output a lot of text on the clusters since there are a lot of installed software, to limit the output we can limit it to what we are interested in, for example the GROMACS software :
+Note that this command returns a lot of information since there is a lot of installed software. To reduce the output we can search for what we are interested in, for example:
     
     (node)$> module avail 2>&1 | grep -i gromacs
     bio/GROMACS/4.6.1-ictce-5.3.0-hybrid
     bio/GROMACS/4.6.1-ictce-5.3.0-mt
     bio/GROMACS/4.6.5-goolf-1.4.10-mt (D)
     [...]
-This will only output the software modules from the software stack that contain "gromacs" in their name.
+This will only output the software modules from the software stack that contain "gromacs" (case insensitive) in their name.
 
-To start using the version you want, for example `bio/GROMACS/4.6.5-goolf-1.4.10-mt`, we are going to `load` the software module:  
+To start using an application in the version we require, for example `bio/GROMACS/4.6.5-goolf-1.4.10-mt`, we are going to `load` its software module:  
 `(node)$> module load bio/GROMACS/4.6.5-goolf-1.4.10-mt`
 
-You can now use the software and work with it. To check that it is actually loaded, list the loaded software modules:
+We can now use the software by running its commands (e.g. for Gromacs we can now use `mdrun`).
+
+To check the currently loaded modules, we use the `module list` command:
 
     (node)$> module list
     Currently Loaded Modules:
@@ -45,131 +48,159 @@ You can now use the software and work with it. To check that it is actually load
         2) system/hwloc/1.6.2-GCC-4.7.2   5) numlib/OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2   8) toolchain/goolf/1.4.10
         3) mpi/OpenMPI/1.6.4-GCC-4.7.2    6) numlib/FFTW/3.3.3-gompi-1.4.10                    9) bio/GROMACS/4.6.5-goolf-1.4.10-mt
 
-When you're finished working with it, unload the software module:  
+When we've finished working with the application, we can remove its environment profile with `module unload`:  
 `(node)$> module unload bio/GROMACS/4.6.5-goolf-1.4.10-mt`
 
-However, this will only unload the `bio/GROMACS/4.6.5-goolf-1.4.10-mt` software module itself, not its dependencies, as you can see it:
+However, this will not remove its dependencies from the environment:
 
     (node)$> module list
     Currently Loaded Modules:
         1) compiler/GCC/4.7.2             4) toolchain/gompi/1.4.10                            7) numlib/ScaLAPACK/2.0.2-gompi-1.4.10-OpenBLAS-0.2.6-LAPACK-3.4.2
         2) system/hwloc/1.6.2-GCC-4.7.2   5) numlib/OpenBLAS/0.2.6-gompi-1.4.10-LAPACK-3.4.2   8) toolchain/goolf/1.4.10
         3) mpi/OpenMPI/1.6.4-GCC-4.7.2    6) numlib/FFTW/3.3.3-gompi-1.4.10
-You could unload all these dependencies by hand, but it would be too long and painful, the efficient way is to `purge` the loaded software modules to restore the initial state of the session:  
-`(node)$> module purge`  
-This unloads *all* the software modules that you see with `module list`.
 
-Now that we have the basics to manipulate the software modules, we're going to deeper look at them and the different concepts surrounding them.
+To remove all the loaded modules at once we use the `module purge` command:  
+`(node)$> module purge`
+
+Next we are going to look at the hierarchical architecture of the modules.
 
 ### Software stack architecture
 
-The upper layer of the architecture is what we call the *sofwtare set*. It is a collection of software, common example are a _core_ software set that would contain only tested software and an _experimental_ one that would contain untested software.  
-The goal of these groupings is to provide information on the degree of support for the various software.
+The upper layer of the architecture is what we call a *software set*. It is a collection of software, for example we define a _core_ set that only contains commonly-used and tested software and an _experimental_ set that contains untested software.  
+The main goal of these categories is to provide information on the degree of support for the various software.
 
-Inside of these software sets, software are named with regard to a *naming scheme* which provides information on the software and allows for a better presentation of results of the `module avail` command.  
-Software named following following this naming scheme have the following skeleton: **software_class/software_name/software_complete_version** where  
-- software_class describes the category in which the software is classified and can be found among the following classe: [base, bio, cae, chem, compiler, data, debugger, devel, lang, lib, math, mpi, numlib, phys, system, toolchain, tools, vis]
-- software_name is the name of the software, e.g. GROMACS or ABySS
-- software_complete_version is the complete version of the software: it contains the version of the software itself followed by the type and version of the main dependencies it relies on (e.g. compiler) with the following format: software_version-dependencies_versions
+Inside these sets, software is named in regards to a *naming scheme* which classifies the software (e.g. compilers, physics) and allows for a better structuring of results with the `module avail` command.  
+The software named using this scheme has the following format: **software_class/software_name/software_complete_version** where  
+- **software_class** describes the category among the following classes: [base, bio, cae, chem, compiler, data, debugger, devel, lang, lib, math, mpi, numlib, phys, system, toolchain, tools, vis]
+- **software_name** is the name of the software (e.g. GROMACS, MATLAB, R or ABySS)
+- **software_complete_version** is the full version of the software: containing the version of the software itself followed by the type and version of the main dependencies it relies on (e.g. compiler) with the following format: software_version-dependencies_versions
 
-What all this architecture allows when considering the usage of the software stack is that it provides more information in a more structured way.  
-Firstly, all the software of a given software set will be grouped together when listing the software with the `module avail` command.  
-And inside of a given software set, the various software will be groupe by software class.
+The `module avail` command will thus have the output shown below, where we can note:
 
-The `module avail` command will then have the following general output:  
-![module avail output](images/av_output.png)
+- the core software set is shown first
+- application names are prefixed with the category (class)
+- full versions including tool dependencies are shown
+- the default module for each application is marked with a `(D)`, thus by loading `compiler/GCC` the system would in effect load `compiler/GCC/4.8.2`
 
-## Adding a software to the existing stack
+        ```
+        -------------------------------------------------------- /mnt/gaiagpfs/users/homedirs/mschmitt-easybuild/.local/resif/devel/v0.9-20150226/core/modules/bio --------------------------------------------------------
+           bio/ABySS/1.3.4-goolf-1.4.10-Python-2.7.3        bio/Bowtie2/2.2.2-goolf-1.4.10   (D)    bio/GROMACS/4.6.1-ictce-5.3.0-hybrid     bio/GROMACS/4.6.5-goolf-1.4.10-mt (D)
+           bio/Bowtie2/2.0.2-ictce-5.3.0                    bio/Cufflinks/2.0.2-ictce-5.3.0  (D)    bio/GROMACS/4.6.5-goolf-1.4.10-hybrid    bio/SAMtools/0.1.18-ictce-5.3.0   (D)
+        
+        -------------------------------------------------------- /mnt/gaiagpfs/users/homedirs/mschmitt-easybuild/.local/resif/devel/v0.9-20150226/core/modules/cae --------------------------------------------------------
+           cae/ABAQUS/6.11.1    cae/OpenFOAM/2.3.0-goolf-1.4.10    cae/OpenFOAM/2.3.0-ictce-5.3.0 (D)
+        
+        ------------------------------------------------------- /mnt/gaiagpfs/users/homedirs/mschmitt-easybuild/.local/resif/devel/v0.9-20150226/core/modules/chem --------------------------------------------------------
+           chem/ABINIT/7.2.1-x86_64_linux_gnu4.5                chem/GPAW/0.9.0.8965-goolf-1.4.10-Python-2.7.3        chem/QuantumESPRESSO/5.0.2-goolf-1.4.10              chem/libctl/3.2.1-goolf-1.4.10
+           chem/ASE/3.6.0.2515-ictce-5.3.0-Python-2.7.3  (D)    chem/QuantumESPRESSO/5.0.2-goolf-1.4.10-hybrid        chem/QuantumESPRESSO/5.0.2-ictce-5.3.0        (D)
+        
+        ----------------------------------------------------- /mnt/gaiagpfs/users/homedirs/mschmitt-easybuild/.local/resif/devel/v0.9-20150226/core/modules/compiler ------------------------------------------------------
+           compiler/GCC/4.7.2    compiler/GCC/4.8.2 (D)    compiler/icc/2013.3.163    compiler/ifort/2013.3.163
+        
+        ------------------------------------------------------- /mnt/gaiagpfs/users/homedirs/mschmitt-easybuild/.local/resif/devel/v0.9-20150226/core/modules/data --------------------------------------------------------
+           data/HDF5/1.8.7-goolf-1.4.10    data/HDF5/1.8.10-patch1-goolf-1.4.10        data/netCDF/4.2-goolf-1.4.10            data/netCDF-C++/4.2-goolf-1.4.10
+           data/HDF5/1.8.9-ictce-5.3.0     data/h5utils/1.12.1-ictce-5.3.0      (D)    data/netCDF/4.2.1.1-ictce-5.3.0  (D)    data/netCDF-Fortran/4.2-ictce-5.3.0  (D)
+        ```
 
-In this part, we are going to go through the steps to add a software that is not already provided on the platform. This is done using the RESIF tool.
-So first of all we are going to install this software and then use it to add a software (bzip2).
+## Adding a software to an existing stack on UL HPC
 
-We are still going to work from a job (node) here.
+In this part, we are going to show the steps to add a software that is not already provided on the platform yet is available as a module in the [EasyBuild database](https://github.com/hpcugent/easybuild/wiki/List-of-supported-software-packages). Using the RESIF tool is the preferred way to add new software.
+First of all we are going to install RESIF and then use it to add a software (bzip2 in this example).
+
+Note: The following commands must be executed in an OAR job.
 
 ### Installation of RESIF
 
-First, there are a few prerequisites that we need to have:
+RESIF requires the following prerequisites (already available on the platform):
 
-- Python 2.6 or above
-- pip (a python command line installer)
-- git
+- [Python 2.6](https://www.python.org/downloads) or above
+- pip (included in the latest Python)
+- [git](http://git-scm.com/downloads)
 
-Once all of that is installed, we can start installing RESIF.
-
-We install RESIF:
+RESIF installation:
 
         (node)$> pip install --install-option="--prefix=$HOME/.local" resif
 
-To make it available and working, we need to modify some environement variables:
+Initially, we need to add the following paths to the environment:
 
         (node)$> export PATH=$PATH:~/local/bin
         (node)$> export PYTHONPATH=$PYTHONPATH:~/local/lib/python2.6/site-packages
 
-And then initialize it (this will download the required sources to build new software):
+RESIF initialization which will download the required module sources to build new software:
 
         (node)$> resif init
 
-Once this is finished we can start the steps to actually install the new software.
-
 ### Installation of additional software
 
-First we need to create a file that describes what we want to install. Create a file (we are assuming it is in your home directory), name it `swsets.yaml` and make its content to match the following lines:
+First we need to create a file that lists the applications we want to install.  
+To search for the names of the application configuration files, we use RESIF as follow:
+
+        (node)$> resif search bzip2
+        [...]
+        * bzip2-1.0.6.eb
+        [...]
+Create a file (we are assuming it is in the home directory), name it `swsets.yaml` and insert the following content:
 
         mysoftware:
           - bzip2-1.0.6.eb
 
-This is the format that RESIF reads, the layout is the following:
+This is a [YAML](http://yaml.org/) format file that RESIF reads, the internal layout is the following:
 
-        software_set1:
-          - software1
-          - software2
-        software_set2:
-          - software3
-You can put as much software and/or software sets as you want.
+        software_set1_name:
+          - software1_configurationfile
+          - software2_configurationfile
+        software_set2_name:
+          - software3_configurationfile
+It can list as many software, divided in as many software sets as we require to structure our installation.
 
-Now install the software using the build subcommand:
+Now we install the software using `resif build`:
 
         (node)$> resif build --installdir ~/.local/resif --swsets-config ~/swsets.yaml mysoftware
 This will install the software using ~/.local/resif as the root of the installation.
 
-To make the software available you then need to add its path to the list of the available pathes:
+To make the software modules available through the `module` command, we need to add their path:
 
         (node)$> export MODULEPATH=~/.local/resif/mysoftware/modules/all:$MODULEPATH
 
-Now, we should see `bzip2` at the very beginning of the output of the list of the software modules:
+Now, we can see `bzip2` at the very beginning of the output of the list of the software modules:
 
         (node)$> module avail
         ----- /home/users/username/.local/resif/mysoftware/core/modules/all -----
         tools/bzip2/1.0.6
 
-Your software is installed and ready to use.
+The software is installed, and we can load its profile with `module load tools/bzip2/1.0.6`.
 
-RESIF offers a lot more possibilities than what we just saw, for more details, go check the [documentation](LINK_TO_ADD_HERE) of the tool.
+RESIF offers many more possibilities than this basic functionality, for more details check the [documentation](LINK_TO_ADD_HERE).
 
-## Replicating the architecture of the platform on a local environment
+## Replicating the software sets in a local environment
 
-In this part, we are going to create a software stack from scratch. This is especially useful if you want to work on a local machine (e.g. your laptop) with the same tools than those provided on the platform (for example when you're travelling).
+In this part, we are going to create a software stack from scratch. This is especially useful if we want to work on a local workstation (e.g. a laptop) with the same tools as those available on the platform.
 
-We suppose that RESIF is already installed, if not, follow the instructions described [above](#installation-of-resif).
+We assume that RESIF is already installed as per the instructions described [above](#installation-of-resif).  
+Note: RESIF internally depends on [EasyBuild](http://easybuild.readthedocs.org/en/latest/) which is compatible with Linux/OSX but not Windows. On Windows, you can configure a Linux Virtual Machine to use RESIF and the software built using it.
 
 ### Direct method
 
-The first thing to do is to create the swsets.yaml file that describes which software we want to install. Create in your home directory a file named `swsets.yaml` and make it match the following content:
+A `swsets.yaml` file that describes which software we want to install needs to be created.  
+As an example, create it in your home directory with the following content:
 
         core:
           - bzip2-1.0.6.eb
           - ABINIT-7.2.1-x86_64_linux_gnu4.5.eb
 
-We could make the list go longer, but this would take much longer and is not necessary for our example.
+We include here only the bzip2 library and the ABINIT software as they are fast to deploy.
 
-We can now install all the software stack in a single command:
+We can now install this simple software stack with the following command:
 
         $> resif cleaninstall --swsets-config ~/swsets.yaml core
 This will install everything using `~/.local/resif` as the root of the installation.
 
-To use this newly installed software stack, source the LOADME file inside of the rootinstall directory (This path should look like this: `~/.local/resif/devel/vx.y-YYYYMMDD/LOADME-vx.y-YYYYMMDD.sh`)
+To use this newly installed software stack, you need to source the LOADME file inside of the rootinstall directory.  
+This path should look like this: `~/.local/resif/devel/vx.y-YYYYMMDD/LOADME-vx.y-YYYYMMDD.sh`.
 
-The software stack is now ready to be used.
+        $> source ~/.local/resif/devel/vx.y-YYYYMMDD/LOADME-vx.y-YYYYMMDD.sh
+
+The software stack is now ready to be used with the `module` command.
 
 ### Indirect method
 
@@ -180,24 +211,27 @@ We create the architecture using the `bootstrap` subcommand:
         $> resif bootstrap
 This will create the architecture using `~/.local/resif` as the root of the installation.
 
-We now need to make this architecture active: source the LOADME file inside of the rootinstall directory (This path should look like this: `~/.local/resif/devel/vx.y-YYYYMMDD/LOADME-vx.y-YYYYMMDD.sh`)
+We now need to make this architecture active: you need to source the LOADME file inside of the rootinstall directory.  
+This path should look like this: `~/.local/resif/devel/vx.y-YYYYMMDD/LOADME-vx.y-YYYYMMDD.sh`.
 
-Then we need to create the file that describe the software we want to install. In your home directory, create a file named `swsets.yaml` and make it match the following content:
+        $> source ~/.local/resif/devel/vx.y-YYYYMMDD/LOADME-vx.y-YYYYMMDD.sh
+
+Then we need to create the file that describe the software we want to install. In the home directory, create a file named `swsets.yaml` and make it match the following content:
 
         core:
           - bzip2-1.0.6.eb
           - ABINIT-7.2.1-x86_64_linux_gnu4.5.eb
 
-We could make the list go longer, but this would take much longer and is not necessary for our example.
+We include here only the bzip2 library and the ABINIT software as they are fast to deploy.
 
 We now only need to build the given software:
 
         $> resif build --swsets-config ~/swsets.yaml core
 
-This will install the software listed in the swsets.yaml file. The software stack is now ready to be used.
+This will install the software listed in the `swsets.yaml` file. The software stack is now ready to be used.
 
 
-To learn more about RESIF and how to control more parameters of its usage, please refer to the [documentation](LINK_TO_ADD_HERE) of the tool.
+To learn more about RESIF and how to control more parameters of its usage, please refer to the [documentation](LINK_TO_ADD_HERE).
 
 To conclude this tutorial, here is a schema that summarizes the previous parts:
 
