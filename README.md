@@ -19,6 +19,10 @@ Environment Modules allow us to provide a multitude of applications and librarie
 
 ### `module` command basics and workflow
 
+Firstly, we activate the newest software stack:
+
+    source /opt/apps/resif/devel/v0.9-20150310/LOADME-v0.9-20150310.sh
+
 By using `module available` (or the shorter forms `module avail` or `module av`) we can list all the software modules of the software stack:  
 
     (node)$> module avail
@@ -83,21 +87,21 @@ The `module avail` command will thus have the output shown below, where we can n
 - the default module for each application is marked with a `(D)`, thus by loading `compiler/GCC` the system would in effect load `compiler/GCC/4.8.2`
 
         ```
-        -------------------------------------------------------- /mnt/gaiagpfs/users/homedirs/mschmitt-easybuild/.local/resif/devel/v0.9-20150226/core/modules/bio --------------------------------------------------------
+        ------------------------------------------------------------------------------ /opt/apps/resif/devel/v0.9-20150310/core/modules/bio -------------------------------------------------------------------------------
            bio/ABySS/1.3.4-goolf-1.4.10-Python-2.7.3        bio/Bowtie2/2.2.2-goolf-1.4.10   (D)    bio/GROMACS/4.6.1-ictce-5.3.0-hybrid     bio/GROMACS/4.6.5-goolf-1.4.10-mt (D)
            bio/Bowtie2/2.0.2-ictce-5.3.0                    bio/Cufflinks/2.0.2-ictce-5.3.0  (D)    bio/GROMACS/4.6.5-goolf-1.4.10-hybrid    bio/SAMtools/0.1.18-ictce-5.3.0   (D)
         
-        -------------------------------------------------------- /mnt/gaiagpfs/users/homedirs/mschmitt-easybuild/.local/resif/devel/v0.9-20150226/core/modules/cae --------------------------------------------------------
+        ------------------------------------------------------------------------------ /opt/apps/resif/devel/v0.9-20150310/core/modules/cae -------------------------------------------------------------------------------
            cae/ABAQUS/6.11.1    cae/OpenFOAM/2.3.0-goolf-1.4.10    cae/OpenFOAM/2.3.0-ictce-5.3.0 (D)
         
-        ------------------------------------------------------- /mnt/gaiagpfs/users/homedirs/mschmitt-easybuild/.local/resif/devel/v0.9-20150226/core/modules/chem --------------------------------------------------------
+        ------------------------------------------------------------------------------ /opt/apps/resif/devel/v0.9-20150310/core/modules/chem ------------------------------------------------------------------------------
            chem/ABINIT/7.2.1-x86_64_linux_gnu4.5                chem/GPAW/0.9.0.8965-goolf-1.4.10-Python-2.7.3        chem/QuantumESPRESSO/5.0.2-goolf-1.4.10              chem/libctl/3.2.1-goolf-1.4.10
            chem/ASE/3.6.0.2515-ictce-5.3.0-Python-2.7.3  (D)    chem/QuantumESPRESSO/5.0.2-goolf-1.4.10-hybrid        chem/QuantumESPRESSO/5.0.2-ictce-5.3.0        (D)
         
-        ----------------------------------------------------- /mnt/gaiagpfs/users/homedirs/mschmitt-easybuild/.local/resif/devel/v0.9-20150226/core/modules/compiler ------------------------------------------------------
+        ---------------------------------------------------------------------------- /opt/apps/resif/devel/v0.9-20150310/core/modules/compiler ----------------------------------------------------------------------------
            compiler/GCC/4.7.2    compiler/GCC/4.8.2 (D)    compiler/icc/2013.3.163    compiler/ifort/2013.3.163
         
-        ------------------------------------------------------- /mnt/gaiagpfs/users/homedirs/mschmitt-easybuild/.local/resif/devel/v0.9-20150226/core/modules/data --------------------------------------------------------
+        ------------------------------------------------------------------------------ /opt/apps/resif/devel/v0.9-20150310/core/modules/data ------------------------------------------------------------------------------
            data/HDF5/1.8.7-goolf-1.4.10    data/HDF5/1.8.10-patch1-goolf-1.4.10        data/netCDF/4.2-goolf-1.4.10            data/netCDF-C++/4.2-goolf-1.4.10
            data/HDF5/1.8.9-ictce-5.3.0     data/h5utils/1.12.1-ictce-5.3.0      (D)    data/netCDF/4.2.1.1-ictce-5.3.0  (D)    data/netCDF-Fortran/4.2-ictce-5.3.0  (D)
         ```
@@ -125,6 +129,8 @@ Initially, we need to add the following paths to the environment:
 
         (node)$> export PATH=$PATH:~/local/bin
         (node)$> export PYTHONPATH=$PYTHONPATH:~/local/lib/python2.6/site-packages
+
+Also, 
 
 RESIF initialization which will download the required module sources to build new software:
 
@@ -170,7 +176,7 @@ Now, we can see `bzip2` at the very beginning of the output of the list of the s
 
 The software is installed, and we can load its profile with `module load tools/bzip2/1.0.6`.
 
-RESIF offers many more possibilities than this basic functionality, for more details check the [documentation](LINK_TO_ADD_HERE).
+RESIF offers many more possibilities than this basic functionality, for more details check the [documentation](http://resif-pypi.readthedocs.org/en/latest/).
 
 ## Replicating the software sets in a local environment
 
@@ -231,7 +237,7 @@ We now only need to build the given software:
 This will install the software listed in the `swsets.yaml` file. The software stack is now ready to be used.
 
 
-To learn more about RESIF and how to control more parameters of its usage, please refer to the [documentation](LINK_TO_ADD_HERE).
+To learn more about RESIF and how to control more parameters of its usage, please refer to the [documentation](http://resif-pypi.readthedocs.org/en/latest/).
 
 To conclude this tutorial, here is a schema that summarizes the previous parts:
 
